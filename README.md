@@ -23,7 +23,7 @@ It provides **plan generation**, **nutrition guidance**, **exercise library**, *
 ## 📦 Installation
 
 ```bash
-git clone https://github.com/harundurmush/Fitness-App-Backend.git
+git clone https://github.com/harundurmush/fitness-app-backend.git
 cd fitness-app-backend
 npm install
 ```
