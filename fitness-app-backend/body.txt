@@ -1,0 +1,31 @@
+{ "basicInfo": { "gender": "male", "motivationSource": "health", "mainGoal": "muscle_gain", "focusArea": "upper_body" }, "physicalMetrics": { "heightCm": 180, "currentWeightKg": 75, "targetWeightKg": 82, "birthYear": 1995 }, "workoutPreferences": { "location": "gym", "frequencyPerWeek": 5, "specificDays": ["monday", "wednesday", "friday", "saturday", "sunday"], "injuries": ["shoulder"] }, "fitnessAssessment": { "fitnessLevel": "intermediate", "cardioTest": "slightly_out_of_breath", "flexibilityTest": "close", "rewardPreference": "progress_pics", "targetMood": "energized" } }
+
+{
+  "userProfile": {
+    "basicInfo": {
+      "gender": "male",
+      "motivationSource": "health",
+      "mainGoal": "muscle_gain",
+      "focusArea": "upper_body"
+    },
+    "physicalMetrics": {
+      "heightCm": 180,
+      "currentWeightKg": 75,
+      "targetWeightKg": 82,
+      "birthYear": 1995
+    },
+    "workoutPreferences": {
+      "location": "gym",
+      "frequencyPerWeek": 5,
+      "specificDays": ["monday", "wednesday", "friday", "saturday", "sunday"],
+      "injuries": ["shoulder"]
+    },
+    "fitnessAssessment": {
+      "fitnessLevel": "intermediate",
+      "cardioTest": "slightly_out_of_breath",
+      "flexibilityTest": "close",
+      "rewardPreference": "progress_pics",
+      "targetMood": "energized"
+    }
+  }
+}

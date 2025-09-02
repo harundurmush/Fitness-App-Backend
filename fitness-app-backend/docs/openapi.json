@@ -1,0 +1,245 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Fitness App API",
+    "version": "1.0.0",
+    "description": "Workout plan, nutrition, logs & progression endpoints"
+  },
+  "servers": [
+    { "url": "http://localhost:5000", "description": "Local" }
+  ],
+  "paths": {
+    "/api/plan": {
+      "post": {
+        "summary": "Compute a plan (no save)",
+        "tags": ["Plan"],
+        "parameters": [
+          { "in": "header", "name": "x-user-id", "schema": { "type": "string" }, "required": false }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserProfile" } } }
+        },
+        "responses": {
+          "200": { "description": "Computed plan" },
+          "400": { "description": "Validation failed" }
+        }
+      }
+    },
+    "/api/plan/save": {
+      "post": {
+        "summary": "Compute and save a plan",
+        "tags": ["Plan"],
+        "parameters": [
+          { "in": "header", "name": "x-user-id", "schema": { "type": "string" }, "required": true },
+          { "in": "query", "name": "timezone", "schema": { "type": "string" } },
+          { "in": "query", "name": "startDate", "schema": { "type": "string", "format": "date" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserProfile" } } }
+        },
+        "responses": {
+          "201": { "description": "Plan saved" },
+          "400": { "description": "Validation failed / missing userId" }
+        }
+      }
+    },
+    "/api/plan/plans": {
+      "get": {
+        "summary": "List saved plans",
+        "tags": ["Plan"],
+        "parameters": [
+          { "in": "header", "name": "x-user-id", "schema": { "type": "string" }, "required": true },
+          { "in": "query", "name": "limit", "schema": { "type": "integer" } },
+          { "in": "query", "name": "page", "schema": { "type": "integer" } },
+          { "in": "query", "name": "sort", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "List of plans" } }
+      }
+    },
+    "/api/plan/plans/{id}": {
+      "get": {
+        "summary": "Get a single plan",
+        "tags": ["Plan"],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } },
+          { "in": "header", "name": "x-user-id", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "Plan document" }, "404": { "description": "Not found" } }
+      },
+      "put": {
+        "summary": "Update & recompute plan",
+        "tags": ["Plan"],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } },
+          { "in": "header", "name": "x-user-id", "schema": { "type": "string" }, "required": true }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "properties": { "userProfile": { "$ref": "#/components/schemas/UserProfile" }, "startDate": { "type": "string", "format": "date" }, "timezone": { "type": "string" } }, "required": ["userProfile"] } } }
+        },
+        "responses": { "200": { "description": "Updated" } }
+      },
+      "delete": {
+        "summary": "Delete plan",
+        "tags": ["Plan"],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } },
+          { "in": "header", "name": "x-user-id", "schema": { "type": "string" }, "required": true }
+        ],
+        "responses": { "200": { "description": "Deleted" } }
+      }
+    },
+    "/api/plan/plans/{id}/today": {
+      "get": {
+        "summary": "Today view",
+        "tags": ["Plan"],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } },
+          { "in": "header", "name": "x-user-id", "schema": { "type": "string" }, "required": true },
+          { "in": "query", "name": "date", "schema": { "type": "string", "format": "date" } }
+        ],
+        "responses": { "200": { "description": "Today view payload" } }
+      }
+    },
+    "/api/logs": {
+      "post": {
+        "summary": "Create or update a workout log (upsert)",
+        "tags": ["Logs"],
+        "parameters": [
+          { "in": "header", "name": "x-user-id", "schema": { "type": "string" }, "required": true }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/WorkoutLog" } } }
+        },
+        "responses": { "200": { "description": "Upserted log" } }
+      },
+      "get": {
+        "summary": "List logs",
+        "tags": ["Logs"],
+        "parameters": [
+          { "in": "header", "name": "x-user-id", "schema": { "type": "string" }, "required": true },
+          { "in": "query", "name": "planId", "schema": { "type": "string" } },
+          { "in": "query", "name": "from", "schema": { "type": "string", "format": "date" } },
+          { "in": "query", "name": "to", "schema": { "type": "string", "format": "date" } }
+        ],
+        "responses": { "200": { "description": "Logs" } }
+      }
+    },
+    "/api/logs/today": {
+      "get": {
+        "summary": "Get today log + today view",
+        "tags": ["Logs"],
+        "parameters": [
+          { "in": "header", "name": "x-user-id", "schema": { "type": "string" }, "required": true },
+          { "in": "query", "name": "planId", "schema": { "type": "string" }, "required": true },
+          { "in": "query", "name": "date", "schema": { "type": "string", "format": "date" } }
+        ],
+        "responses": { "200": { "description": "Today log + view" } }
+      }
+    },
+    "/api/logs/progression": {
+      "get": {
+        "summary": "Progression suggestions",
+        "tags": ["Progression"],
+        "parameters": [
+          { "in": "header", "name": "x-user-id", "schema": { "type": "string" }, "required": true },
+          { "in": "query", "name": "planId", "schema": { "type": "string" }, "required": true },
+          { "in": "query", "name": "lookbackDays", "schema": { "type": "integer" } },
+          { "in": "query", "name": "minSessions", "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "Suggestions" } }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "basicInfo": {
+            "type": "object",
+            "properties": {
+              "gender": { "type": "string" },
+              "motivationSource": { "type": "string" },
+              "mainGoal": { "type": "string", "enum": ["weight_loss", "muscle_gain", "maintenance"] },
+              "focusArea": { "type": "string" }
+            },
+            "required": ["gender", "mainGoal", "focusArea"]
+          },
+          "physicalMetrics": {
+            "type": "object",
+            "properties": {
+              "heightCm": { "type": "number" },
+              "currentWeightKg": { "type": "number" },
+              "targetWeightKg": { "type": "number" },
+              "birthYear": { "type": "number" }
+            },
+            "required": ["heightCm", "currentWeightKg", "targetWeightKg", "birthYear"]
+          },
+          "workoutPreferences": {
+            "type": "object",
+            "properties": {
+              "location": { "type": "string", "enum": ["home", "gym", "outdoor"] },
+              "frequencyPerWeek": { "type": "integer", "enum": [3,5,7] },
+              "specificDays": { "type": "array", "items": { "type": "string" } },
+              "injuries": { "type": "array", "items": { "type": "string" } }
+            },
+            "required": ["location", "frequencyPerWeek", "injuries"]
+          },
+          "fitnessAssessment": {
+            "type": "object",
+            "properties": {
+              "fitnessLevel": { "type": "string", "enum": ["beginner","intermediate","advanced"] },
+              "cardioTest": { "type": "string" },
+              "flexibilityTest": { "type": "string" },
+              "rewardPreference": { "type": "string" },
+              "targetMood": { "type": "string" }
+            },
+            "required": ["fitnessLevel"]
+          }
+        },
+        "required": ["basicInfo","physicalMetrics","workoutPreferences","fitnessAssessment"]
+      },
+      "WorkoutLog": {
+        "type": "object",
+        "properties": {
+          "planId": { "type": "string" },
+          "date": { "type": "string", "format": "date" },
+          "exercises": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "targetSets": { "type": "integer" },
+                "targetReps": { "type": "integer" },
+                "performedSets": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "reps": { "type": "integer" },
+                      "weightKg": { "type": "number" },
+                      "rpe": { "type": "number" },
+                      "success": { "type": "boolean" }
+                    }
+                  }
+                }
+              },
+              "required": ["name"]
+            }
+          }
+        },
+        "required": ["planId","date","exercises"]
+      }
+    }
+  },
+  "tags": [
+    { "name": "Plan" },
+    { "name": "Logs" },
+    { "name": "Progression" }
+  ]
+}

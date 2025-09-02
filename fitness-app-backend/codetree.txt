@@ -1,0 +1,52 @@
+fitness-app-backend/
+├── config/
+│   └── db.js
+├── controllers/
+│   ├── authController.js
+│   ├── exerciseController.js
+│   ├── favoriteController.js
+│   ├── logController.js
+│   ├── planController.js
+│   ├── progressionController.js
+│   └── recommendationController.js
+├── data/
+│   ├── exercisePool.js
+│   └── injuryAdaptations.js
+├── docs/
+│   ├── openapi.json
+│   └── swagger.js
+├── middlewares/
+│   ├── auth.js
+│   ├── errorHandler.js
+│   └── validate.js
+├── models/
+│   ├── exerciseModel.js
+│   ├── favoriteModel.js
+│   ├── planHistoryModel.js
+│   ├── planModel.js
+│   ├── userModel.js
+│   └── workoutLogModel.js
+├── routes/
+│   ├── authRoutes.js
+│   ├── exerciseRoutes.js
+│   ├── favoriteRoutes.js
+│   ├── logRoutes.js
+│   └── planRoutes.js
+├── scripts/
+│   └── seedExercises.js
+├── services/
+│   ├── exerciseService.js
+│   ├── milestoneService.js
+│   ├── motivationService.js
+│   ├── nutritionService.js
+│   ├── planService.js
+│   ├── progressionApplyService.js
+│   ├── progressionService.js
+│   ├── recommendationService.js
+│   └── scheduleService.js
+├── app.js
+├── body.txt
+├── codetree.py
+├── package-lock.json
+├── package.json
+└── server.js
